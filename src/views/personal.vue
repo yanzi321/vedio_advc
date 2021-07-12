@@ -107,8 +107,14 @@ export default {
   },
   methods: {
     init() {
+      const loading = this.$loading({
+        lock: true,
+        text: "数据加载中",
+        spinner: "el-icon-loading"
+      });
       UserInfo().then(({ data }) => {
         this.user = data;
+        loading.close();
       });
     }
   }

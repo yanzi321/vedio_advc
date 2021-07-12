@@ -8,7 +8,7 @@ import router from "@/router";
 // http://advpc.muke.design
 const domain = "http://advpc.muke.design";
 
-axios.defaults.timeout = 30000;
+axios.defaults.timeout = 60000;
 axios.defaults.baseURL = domain;
 
 //http request 拦截器
@@ -50,10 +50,13 @@ export async function HTTP(url = "", params = {}, methods = "post") {
         }
       })
       .catch(err => {
-        if (err.response.status === 401) {
+        const response = err.response;
+        if (response.status === 401) {
+          localStorage.clear();
+          sessionStorage.clear();
           router.push("/login");
         }
-        reject(err.response.data.msg || err.response.statusText);
+        reject(response.data.msg || response.statusText);
       });
   });
 }

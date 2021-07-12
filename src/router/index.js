@@ -23,6 +23,20 @@ const routes = [
       auth: false
     },
     component: () => import("@/views/login")
+  },
+  {
+    path: "/rules/user",
+    meta: {
+      auth: false
+    },
+    component: () => import("@/views/rules/user")
+  },
+  {
+    path: "/rules/privacy",
+    meta: {
+      auth: false
+    },
+    component: () => import("@/views/rules/privacy")
   }
 ];
 
