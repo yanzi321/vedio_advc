@@ -2,26 +2,32 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
-const routes = [{
-        path: "/",
-        meta: {
-            auth: true
-        },
-        component: () =>
-            import ("@/views/index")
+const routes = [
+  {
+    path: "/",
+    meta: {
+      auth: true
     },
-    {
-        path: "/login",
-        meta: {
-            auth: false
-        },
-        component: () =>
-            import ("@/views/login")
-    }
+    component: () => import("@/views/index")
+  },
+  {
+    path: "/personal",
+    meta: {
+      auth: true
+    },
+    component: () => import("@/views/personal")
+  },
+  {
+    path: "/login",
+    meta: {
+      auth: false
+    },
+    component: () => import("@/views/login")
+  }
 ];
 
 const router = new VueRouter({
-    routes
+  routes
 });
 
 export default router;

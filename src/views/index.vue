@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       user: null,
-      video: null,
+      video: null
     };
   },
   mounted() {
@@ -86,11 +86,11 @@ export default {
           console.log(data);
           // this.video = data;
         })
-        .catch((err) => {
+        .catch(err => {
           alert(err);
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -125,14 +125,14 @@ export default {
   }
   .main {
     display: flex;
+    padding: 15px;
     .colL {
-      padding: 0 15px;
-      width: 320px;
+      width: 350px;
       .info {
         border: solid 1px #797979;
         background-color: #fff;
-        margin-top: 15px;
         padding: 8px 15px 15px;
+        margin-bottom: 10px;
         .title {
           font-size: 20px;
           text-align: center;
@@ -182,12 +182,12 @@ export default {
           border: solid 2px #a9a9a9;
           font-size: 18px;
           margin-top: 15px;
+          cursor: pointer;
         }
       }
       .bar {
         border: solid 1px #797979;
         background-color: #fff;
-        margin-top: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -210,7 +210,7 @@ export default {
     .colR {
       flex: 1;
       width: 1%;
-      padding: 15px;
+      margin-left: 10px;
       .video {
         height: 570px;
       }

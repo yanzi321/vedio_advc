@@ -41,26 +41,26 @@ export default {
     return {
       form: {
         email: "Pu3QZKn4@163.com",
-        password: "admin",
+        password: "admin"
       },
       loading: false,
       rules: {
         email: {
           required: true,
           message: "请输入您的账号",
-          trigger: "blur",
+          trigger: "blur"
         },
         password: {
           required: true,
           message: "请输入您的密码",
-          trigger: "blur",
-        },
-      },
+          trigger: "blur"
+        }
+      }
     };
   },
   methods: {
     login() {
-      this.$refs["form"].validate((valid) => {
+      this.$refs["form"].validate(valid => {
         if (valid) {
           this.loading = true;
           UserLogin(this.form)
@@ -69,14 +69,14 @@ export default {
               sessionStorage.video_token = data.token;
               this.$router.push("/");
             })
-            .catch((err) => {
+            .catch(err => {
               this.loading = false;
               this.$message.error(err);
             });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

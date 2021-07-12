@@ -42,21 +42,5 @@ textarea {
   &:hover {
     background-color: transparent;
   }
-  .el-icon-arrow-left {
-    width: 36px;
-    height: 36px;
-    background: url(assets/icon_left.png) no-repeat center;
-    &::before {
-      content: "";
-    }
-  }
-  .el-icon-arrow-right {
-    width: 36px;
-    height: 36px;
-    background: url(assets/icon_right.png) no-repeat center;
-    &::before {
-      content: "";
-    }
-  }
 }
 </style>
