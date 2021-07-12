@@ -7,7 +7,7 @@
           <el-input
             v-model="form.email"
             placeholder="请输入您的账号"
-            prefix-icon="el-icon-message"
+            prefix-icon="el-icon-user"
           ></el-input>
         </el-form-item>
         <el-form-item :style="{ marginBottom: '15px' }" label="">
@@ -26,7 +26,7 @@
           <el-input
             v-model="form.code"
             placeholder="请输入图片验证码"
-            prefix-icon="el-icon-picture-outline"
+            prefix-icon="el-icon-message"
             maxlength="6"
           >
           </el-input>
@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import { UserLogin, CheckCaptcha } from "@/services/api";
+import { UserLogin } from "@/services/api";
 export default {
   components: {},
   data() {
@@ -88,20 +88,21 @@ export default {
     login() {
       const form = this.form;
       this.loading = true;
-      CheckCaptcha({
-        code: form.code
-      })
-        .then(() => {
-          UserLogin(form)
-            .then(({ data }) => {
-              this.loading = false;
-              sessionStorage.video_token = data.token;
-              this.$router.push("/");
-            })
-            .catch(err => {
-              this.loading = false;
-              alert(err);
-            });
+      // CheckCaptcha({
+      //   code: form.code
+      // })
+      //   .then(() => {
+      //
+      //   })
+      //   .catch(err => {
+      //     this.loading = false;
+      //     alert(err);
+      //   });
+      UserLogin(form)
+        .then(({ data }) => {
+          this.loading = false;
+          sessionStorage.video_token = data.token;
+          this.$router.push("/");
         })
         .catch(err => {
           this.loading = false;
@@ -119,15 +120,15 @@ export default {
 .login-page {
   clear: both;
   overflow: hidden;
-  background-color: #9fc7c8;
-  height: 100vh;
+  height: calc(100vh - 1px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border-top: solid 1px #707070;
   .form {
     background-color: #fff;
-    padding: 30px;
+    padding: 20px 30px 30px;
     .title {
       text-align: center;
       font-size: 28px;

@@ -103,14 +103,14 @@ export default {
 .home-page {
   clear: both;
   overflow: hidden;
-  background-color: #9fc7c8;
-  height: 100vh;
+  height: calc(100vh - 1px);
+  border-top: solid 1px #707070;
   .tab {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 44px;
-    padding-top: 15px;
+    padding-top: 10px;
     .li {
       font-size: 24px;
       margin: 0 15px;
@@ -131,11 +131,11 @@ export default {
   }
   .main {
     display: flex;
-    padding: 15px;
+    padding: 10px;
     .colL {
       width: 350px;
       .info {
-        border: solid 1px #797979;
+        border: solid 1px #707070;
         background-color: #fff;
         padding: 8px 15px 15px;
         margin-bottom: 10px;
@@ -147,7 +147,7 @@ export default {
           border: solid 1px #a9a9a9;
           margin-top: 25px;
           .key {
-            font-size: 20px;
+            font-size: 18px;
             line-height: 36px;
             text-align: center;
             background-color: #fff;
@@ -158,7 +158,7 @@ export default {
           .value {
             font-weight: bold;
             text-align: center;
-            padding: 10px 0;
+            padding: 5px 0 12px;
             font-size: 20px;
           }
         }
@@ -192,14 +192,14 @@ export default {
         }
       }
       .bar {
-        border: solid 1px #797979;
+        border: solid 1px #707070;
         background-color: #fff;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 22px;
+        padding: 15px;
         .btn {
-          width: 92px;
+          width: calc(50% - 8px);
           height: 38px;
           border: solid 1px #b8b8b8;
           display: flex;

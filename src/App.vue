@@ -5,6 +5,9 @@
 </template>
 
 <style lang="scss">
+body {
+  background-color: #9fc7c8;
+}
 body,
 div {
   margin: 0;

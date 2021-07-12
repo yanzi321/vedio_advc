@@ -124,14 +124,14 @@ export default {
 .home-page {
   clear: both;
   overflow: hidden;
-  background-color: #9fc7c8;
-  height: 100vh;
+  height: calc(100vh - 1px);
+  border-top: solid 1px #707070;
   .tab {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 44px;
-    padding-top: 15px;
+    padding-top: 10px;
     .li {
       font-size: 24px;
       margin: 0 15px;
@@ -152,12 +152,12 @@ export default {
   }
   .main {
     display: flex;
-    padding: 15px;
-    height: calc(100vh - 89px);
+    padding: 10px;
+    height: calc(100vh - 74px);
     .colL {
       padding: 0 15px;
       width: 320px;
-      border: solid 1px #797979;
+      border: solid 1px #707070;
       background-color: #fff;
       .user {
         display: flex;
@@ -186,7 +186,6 @@ export default {
       }
       .info {
         margin-top: 15px;
-        padding: 8px 15px 15px;
         .title {
           font-size: 20px;
           text-align: center;
@@ -195,7 +194,7 @@ export default {
           border: solid 1px #a9a9a9;
           margin-top: 25px;
           .key {
-            font-size: 20px;
+            font-size: 18px;
             line-height: 36px;
             text-align: center;
             background-color: #fff;
@@ -244,7 +243,7 @@ export default {
       flex: 1;
       width: 1%;
       padding: 5px 15px 15px;
-      border: solid 1px #797979;
+      border: solid 1px #707070;
       background-color: #fff;
       margin-left: 10px;
       .box {
@@ -252,7 +251,7 @@ export default {
         overflow: hidden;
         padding-bottom: 30px;
         .title {
-          border-bottom: dashed 1px #797979;
+          border-bottom: dashed 1px #707070;
           font-size: 20px;
         }
         .list {
