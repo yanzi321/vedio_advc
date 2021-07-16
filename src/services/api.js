@@ -14,3 +14,10 @@ export const GetRules = data => HTTP(`/api/frontend/rules`, data, "get");
 
 // 图片验证码
 export const CheckCaptcha = data => HTTP(`/api/frontend/check-captcha`, data);
+
+// 提现类型
+export const GetCashType = data =>
+  HTTP(`/api/frontend/exchange-type`, data, "get");
+
+// 提现
+export const DoCash = data => HTTP(`/api/frontend/cash-out`, data);

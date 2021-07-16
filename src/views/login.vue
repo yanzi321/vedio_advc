@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import { UserLogin } from "@/services/api";
+import { UserLogin, CheckCaptcha } from "@/services/api";
 export default {
   components: {},
   data() {
@@ -88,21 +88,20 @@ export default {
     login() {
       const form = this.form;
       this.loading = true;
-      // CheckCaptcha({
-      //   code: form.code
-      // })
-      //   .then(() => {
-      //
-      //   })
-      //   .catch(err => {
-      //     this.loading = false;
-      //     alert(err);
-      //   });
-      UserLogin(form)
-        .then(({ data }) => {
-          this.loading = false;
-          sessionStorage.video_token = data.token;
-          this.$router.push("/");
+      CheckCaptcha({
+        code: form.code
+      })
+        .then(() => {
+          UserLogin(form)
+            .then(({ data }) => {
+              this.loading = false;
+              sessionStorage.video_token = data.token;
+              this.$router.push("/");
+            })
+            .catch(err => {
+              this.loading = false;
+              alert(err);
+            });
         })
         .catch(err => {
           this.loading = false;

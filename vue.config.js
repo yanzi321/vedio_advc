@@ -23,11 +23,11 @@ module.exports = {
     loaderOptions: {}
   },
 
-    pluginOptions: {
-        electronBuilder: {
-            nodeIntegration: true
-        }
-    },
+  pluginOptions: {
+    electronBuilder: {
+      nodeIntegration: true
+    }
+  },
 
   chainWebpack: config => {
     config.performance.set("hints", false);

@@ -20,7 +20,7 @@
             <div class="key">余额</div>
             <div class="value">{{ user.surplus }}</div>
           </div>
-          <div class="btn">我要提现</div>
+          <div class="btn" @click="modal = true">我要提现</div>
         </div>
         <div class="info">
           <div class="title">运行信息</div>
@@ -39,7 +39,7 @@
             </div>
             <div class="item">
               <div class="key">运行状态：</div>
-              <div class="status"></div>
+              <div class="status">停止</div>
             </div>
             <div class="item">
               <div class="key">在线时长：</div>
@@ -52,21 +52,35 @@
           <div class="btn">停止</div>
         </div>
       </div>
-      <div class="colR" v-if="video">
-        <video :src="video.url" class="video"></video>
+      <div class="colR">
+        <video :src="video.url" class="video" v-if="video"></video>
       </div>
     </div>
+
+    <!-- 申请提现 -->
+    <el-dialog
+      title="提现申请"
+      width="600px"
+      :visible.sync="modal"
+      @close="modal = false"
+    >
+      <cash v-if="modal" :user="user" @close="modal = false"></cash>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { UserInfo, GetVideo } from "@/services/api";
+import Cash from "@/components/cash";
 export default {
-  components: {},
+  components: {
+    Cash
+  },
   data() {
     return {
       user: null,
-      video: null
+      video: null,
+      modal: false
     };
   },
   mounted() {
@@ -81,6 +95,7 @@ export default {
         spinner: "el-icon-loading"
       });
       UserInfo().then(({ data }) => {
+        data.surplus = Number(data.surplus);
         this.user = data;
         loading.close();
       });
@@ -90,7 +105,7 @@ export default {
       GetVideo()
         .then(({ data }) => {
           console.log(data);
-          // this.video = data;
+          this.video = data;
         })
         .catch(err => {
           alert(err);
@@ -217,6 +232,7 @@ export default {
       flex: 1;
       width: 1%;
       margin-left: 10px;
+      background-color: #000;
       .video {
         height: 570px;
       }
