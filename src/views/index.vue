@@ -4,10 +4,10 @@
       <div class="colL" v-if="user">
         <div class="info">
           <div class="title">用户信息</div>
-          <div class="box" @click="openModal">
+          <router-link to="/personal" target="_blank" class="box">
             <div class="key">账号</div>
             <div class="value">{{ user.email }}</div>
-          </div>
+          </router-link>
           <div class="box">
             <div class="key">余额</div>
             <div class="value">{{ user.surplus }}元</div>
@@ -142,10 +142,6 @@ export default {
         .catch(err => {
           alert(err);
         });
-    },
-
-    openModal() {
-      window.open(`/#/personal`);
     }
   }
 };
@@ -173,6 +169,8 @@ export default {
         .box {
           border: solid 1px #a9a9a9;
           margin-top: 25px;
+          cursor: pointer;
+          display: block;
           .key {
             font-size: 18px;
             line-height: 36px;
@@ -191,6 +189,8 @@ export default {
         }
         .list {
           padding-top: 5px;
+          overflow: hidden;
+          overflow-y: auto;
           .item {
             display: flex;
             padding-top: 6px;
@@ -240,6 +240,7 @@ export default {
           font-size: 18px;
           font-weight: bold;
           background: -webkit-linear-gradient(bottom, #f1f1f1, #fff);
+          cursor: pointer;
           &:nth-child(2) {
             color: #848484;
           }

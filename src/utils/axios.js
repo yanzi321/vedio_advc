@@ -14,7 +14,7 @@ axios.defaults.timeout = 60000;
 //http request 拦截器
 axios.interceptors.request.use(
   config => {
-    const token = sessionStorage.video_token || "";
+    const token = localStorage.video_token || "";
     config.headers = {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: token
@@ -52,8 +52,8 @@ export async function HTTP(url = "", params = {}, methods = "post") {
       .catch(err => {
         const response = err.response;
         if (response.status === 401) {
-          localStorage.clear();
           sessionStorage.clear();
+          localStorage.clear();
           router.push("/login");
         }
         reject(response.data.msg || response.statusText);

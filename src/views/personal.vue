@@ -15,7 +15,7 @@
           </div>
           <div class="box">
             <div class="key">余额</div>
-            <div class="value">{{ user.surplus }}</div>
+            <div class="value">{{ user.surplus }}元</div>
           </div>
           <div class="btn" @click="modal = true">我要提现</div>
         </div>

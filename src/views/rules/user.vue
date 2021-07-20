@@ -19,14 +19,8 @@ export default {
   },
   methods: {
     init() {
-      const loading = this.$loading({
-        lock: true,
-        text: "协议加载中",
-        spinner: "el-icon-loading"
-      });
       GetRules().then(({ data }) => {
         this.row = data[0];
-        loading.close();
       });
     }
   }

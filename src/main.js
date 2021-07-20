@@ -9,7 +9,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  const token = sessionStorage.video_token || null;
+  const token = localStorage.video_token || null;
   if (!token && to.meta.auth) {
     next({
       path: "/login"

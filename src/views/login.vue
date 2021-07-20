@@ -42,9 +42,13 @@
         </div>
         <div :style="{ paddingBottom: '15px', display: 'flex' }">
           <el-checkbox>我已阅读同意</el-checkbox>
-          <div class="link" @click="openModal('user')">《用户协议》</div>
+          <router-link to="/rules/user" target="_blank" class="link"
+            >《用户协议》</router-link
+          >
           <div class="text">和</div>
-          <div class="link" @click="openModal('privacy')">《隐私政策》</div>
+          <router-link to="/rules/privacy" target="_blank" class="link"
+            >《隐私政策》</router-link
+          >
         </div>
         <el-button
           type="primary"
@@ -81,10 +85,6 @@ export default {
     this.renderImage();
   },
   methods: {
-    openModal(key) {
-      window.open(`/#/rules/${key}`);
-    },
-
     login() {
       const form = this.form;
       this.loading = true;
@@ -95,7 +95,7 @@ export default {
           UserLogin(form)
             .then(({ data }) => {
               this.loading = false;
-              sessionStorage.video_token = data.token;
+              localStorage.video_token = data.token;
               this.$router.push("/");
             })
             .catch(err => {
@@ -119,12 +119,11 @@ export default {
 .login-page {
   clear: both;
   overflow: hidden;
-  height: calc(100vh - 1px);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-top: solid 1px #707070;
   .form {
     background-color: #fff;
     padding: 20px 30px 30px;
