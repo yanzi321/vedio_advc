@@ -1,28 +1,20 @@
 <template>
   <div class="home-page">
-    <div class="tab">
-      <router-link class="li el-icon-video-play active" to="/"
-        >视频中心</router-link
-      >
-      <router-link class="li el-icon-user-solid" to="/personal"
-        >个人中心</router-link
-      >
-    </div>
     <div class="main">
       <div class="colL" v-if="user">
         <div class="info">
           <div class="title">用户信息</div>
-          <div class="box">
+          <div class="box" @click="openModal">
             <div class="key">账号</div>
             <div class="value">{{ user.email }}</div>
           </div>
           <div class="box">
             <div class="key">余额</div>
-            <div class="value">{{ user.surplus }}</div>
+            <div class="value">{{ user.surplus }}元</div>
           </div>
           <div class="btn" @click="modal = true">我要提现</div>
         </div>
-        <div class="info">
+        <div class="info" style="height: calc(100vh - 555px)">
           <div class="title">运行信息</div>
           <div class="list">
             <div class="item">
@@ -55,8 +47,15 @@
       <div class="colR">
         <video :src="video.url" class="video" v-if="video"></video>
       </div>
+      <div class="tools">
+        <div class="item" data-key="当前时间：">{{ form.date }}</div>
+        <div class="item" data-key="公网IP：">{{ form.ip }}</div>
+        <div class="item" data-key="服务器端口：">80</div>
+        <div class="item" data-key="网络状态：">{{ form.status }}</div>
+        <div class="item" data-key="连接速度：">{{ form.speed }} ms</div>
+        <div class="item" data-key="客户端版本：">v1.0.0</div>
+      </div>
     </div>
-
     <!-- 申请提现 -->
     <el-dialog
       title="提现申请"
@@ -70,7 +69,7 @@
 </template>
 
 <script>
-import { UserInfo, GetVideo } from "@/services/api";
+import { UserInfo, GetVideo, GetIp } from "@/services/api";
 import Cash from "@/components/cash";
 export default {
   components: {
@@ -80,25 +79,58 @@ export default {
     return {
       user: null,
       video: null,
-      modal: false
+      modal: false,
+      timer: null,
+      form: {
+        date: "",
+        ip: "",
+        speed: "",
+        status: ""
+      }
     };
   },
   mounted() {
     this.init();
-    // this.videoList();
+    this.getTime();
+    this.newWordSpeed();
+    this.getIp();
+    this.videoList();
   },
   methods: {
     init() {
-      const loading = this.$loading({
-        lock: true,
-        text: "数据加载中",
-        spinner: "el-icon-loading"
-      });
       UserInfo().then(({ data }) => {
         data.surplus = Number(data.surplus);
         this.user = data;
-        loading.close();
       });
+    },
+
+    getTime() {
+      const a = new Date();
+      const year = a.getFullYear();
+      const month = a.getMonth() + 1;
+      const day = a.getDate();
+      const hour = a.getHours();
+      const minute = a.getMinutes();
+      this.form.date = `${year}年${month}月${day}日${
+        hour < 10 ? "0" + hour : hour
+      }时${minute < 10 ? "0" + minute : minute}分`;
+    },
+
+    getIp() {
+      GetIp().then(({ origin }) => {
+        this.form.ip = origin;
+      });
+    },
+
+    newWordSpeed() {
+      const that = this;
+      that.timer = setInterval(() => {
+        clearInterval(that.timer);
+        that.form.speed = navigator.connection.downlink;
+        that.form.status = navigator.onLine ? "在线" : "断线";
+        that.getTime();
+        that.newWordSpeed();
+      }, 1000);
     },
 
     videoList() {
@@ -110,6 +142,10 @@ export default {
         .catch(err => {
           alert(err);
         });
+    },
+
+    openModal() {
+      window.open(`/#/personal`);
     }
   }
 };
@@ -118,39 +154,15 @@ export default {
 .home-page {
   clear: both;
   overflow: hidden;
-  height: calc(100vh - 1px);
-  border-top: solid 1px #707070;
-  .tab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    padding-top: 10px;
-    .li {
-      font-size: 24px;
-      margin: 0 15px;
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      width: 180px;
-      height: 44px;
-      justify-content: center;
-      &.active {
-        background-color: #7f7f7f;
-        color: #fff;
-      }
-      &::before {
-        margin-right: 4px;
-      }
-    }
-  }
   .main {
     display: flex;
     padding: 10px;
+    flex-wrap: wrap;
     .colL {
       width: 350px;
+      height: calc(100vh - 92px);
       .info {
-        border: solid 1px #707070;
+        border: solid 1px #ccc;
         background-color: #fff;
         padding: 8px 15px 15px;
         margin-bottom: 10px;
@@ -182,6 +194,7 @@ export default {
           .item {
             display: flex;
             padding-top: 6px;
+            align-items: center;
             .key {
               color: #848484;
               font-size: 16px;
@@ -193,6 +206,9 @@ export default {
               flex: 1;
               width: 1%;
             }
+            .status {
+              font-size: 16px;
+            }
           }
         }
         .btn {
@@ -200,14 +216,15 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          border: solid 2px #a9a9a9;
+          border: solid 1px #a9a9a9;
           font-size: 18px;
           margin-top: 15px;
           cursor: pointer;
+          background: -webkit-linear-gradient(bottom, #f1f1f1, #fff);
         }
       }
       .bar {
-        border: solid 1px #707070;
+        border: solid 1px #ccc;
         background-color: #fff;
         display: flex;
         align-items: center;
@@ -222,6 +239,7 @@ export default {
           justify-content: center;
           font-size: 18px;
           font-weight: bold;
+          background: -webkit-linear-gradient(bottom, #f1f1f1, #fff);
           &:nth-child(2) {
             color: #848484;
           }
@@ -235,6 +253,23 @@ export default {
       background-color: #000;
       .video {
         height: 570px;
+      }
+    }
+    .tools {
+      width: calc(100% - 2px);
+      border: solid 1px #ccc;
+      height: 60px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      .item {
+        margin: 0 20px;
+        font-weight: bold;
+        &::before {
+          content: attr(data-key);
+          font-weight: normal;
+          color: #999;
+        }
       }
     }
   }

@@ -1,23 +1,32 @@
 import { HTTP } from "@/utils/axios";
 
+const domain = "http://advpc.muke.design";
+
 // 登录
-export const UserLogin = data => HTTP(`/api/frontend/login`, data);
+export const UserLogin = data => HTTP(`${domain}/api/frontend/login`, data);
 
 // 用户详情
-export const UserInfo = data => HTTP(`/api/frontend/user-info`, data, "get");
+export const UserInfo = data =>
+  HTTP(`${domain}/api/frontend/user-info`, data, "get");
 
 // 获取播放地址
-export const GetVideo = data => HTTP(`/api/frontend/video-url`, data, "get");
+export const GetVideo = data =>
+  HTTP(`${domain}/api/frontend/video-url`, data, "get");
 
 // 用户协议
-export const GetRules = data => HTTP(`/api/frontend/rules`, data, "get");
+export const GetRules = data =>
+  HTTP(`${domain}/api/frontend/rules`, data, "get");
 
 // 图片验证码
-export const CheckCaptcha = data => HTTP(`/api/frontend/check-captcha`, data);
+export const CheckCaptcha = data =>
+  HTTP(`${domain}/api/frontend/check-captcha`, data);
 
 // 提现类型
 export const GetCashType = data =>
-  HTTP(`/api/frontend/exchange-type`, data, "get");
+  HTTP(`${domain}/api/frontend/exchange-type`, data, "get");
 
 // 提现
-export const DoCash = data => HTTP(`/api/frontend/cash-out`, data);
+export const DoCash = data => HTTP(`${domain}/api/frontend/cash-out`, data);
+
+// 获取公网IP
+export const GetIp = data => HTTP(`http://httpbin.org/ip`, data, "get");

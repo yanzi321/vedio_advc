@@ -1,11 +1,5 @@
 <template>
   <div class="home-page">
-    <div class="tab">
-      <router-link class="li el-icon-video-play" to="/">视频中心</router-link>
-      <router-link class="li el-icon-user-solid active" to="/personal"
-        >个人中心</router-link
-      >
-    </div>
     <div class="main" v-if="user">
       <div class="colL">
         <div class="user">
@@ -121,15 +115,9 @@ export default {
   },
   methods: {
     init() {
-      const loading = this.$loading({
-        lock: true,
-        text: "数据加载中",
-        spinner: "el-icon-loading"
-      });
       UserInfo().then(({ data }) => {
         data.surplus = Number(data.surplus);
         this.user = data;
-        loading.close();
       });
     }
   }
@@ -139,40 +127,14 @@ export default {
 .home-page {
   clear: both;
   overflow: hidden;
-  height: calc(100vh - 1px);
-  border-top: solid 1px #707070;
-  .tab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    padding-top: 10px;
-    .li {
-      font-size: 24px;
-      margin: 0 15px;
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      width: 180px;
-      height: 44px;
-      justify-content: center;
-      &.active {
-        background-color: #7f7f7f;
-        color: #fff;
-      }
-      &::before {
-        margin-right: 4px;
-      }
-    }
-  }
   .main {
     display: flex;
     padding: 10px;
-    height: calc(100vh - 74px);
+    height: calc(100vh - 20px);
     .colL {
       padding: 0 15px;
       width: 320px;
-      border: solid 1px #707070;
+      border: solid 1px #ccc;
       background-color: #fff;
       .user {
         display: flex;
@@ -247,10 +209,11 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          border: solid 2px #a9a9a9;
+          border: solid 1px #a9a9a9;
           font-size: 18px;
           margin-top: 15px;
           cursor: pointer;
+          background: -webkit-linear-gradient(bottom, #f1f1f1, #fff);
         }
       }
     }
@@ -258,7 +221,7 @@ export default {
       flex: 1;
       width: 1%;
       padding: 5px 15px 15px;
-      border: solid 1px #707070;
+      border: solid 1px #ccc;
       background-color: #fff;
       margin-left: 10px;
       .box {
@@ -266,7 +229,7 @@ export default {
         overflow: hidden;
         padding-bottom: 30px;
         .title {
-          border-bottom: dashed 1px #707070;
+          border-bottom: dashed 1px #ccc;
           font-size: 20px;
         }
         .list {

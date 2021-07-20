@@ -6,10 +6,10 @@ import qs from "qs";
 import router from "@/router";
 
 // http://advpc.muke.design
-const domain = "http://advpc.muke.design";
+// const domain = "";
 
 axios.defaults.timeout = 60000;
-axios.defaults.baseURL = domain;
+// axios.defaults.baseURL = domain;
 
 //http request 拦截器
 axios.interceptors.request.use(
