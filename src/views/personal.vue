@@ -135,7 +135,6 @@ export default {
       padding: 0 15px;
       width: 320px;
       border: solid 1px #ccc;
-      background-color: #fff;
       .user {
         display: flex;
         flex-direction: column;
@@ -174,7 +173,7 @@ export default {
             font-size: 18px;
             line-height: 36px;
             text-align: center;
-            background-color: #fff;
+            background-color: #f5f5f5;
             color: #7d7d7d;
             width: 80px;
             margin: -18px auto 0;
@@ -222,7 +221,6 @@ export default {
       width: 1%;
       padding: 5px 15px 15px;
       border: solid 1px #ccc;
-      background-color: #fff;
       margin-left: 10px;
       .box {
         clear: both;

@@ -45,7 +45,13 @@
         </div>
       </div>
       <div class="colR">
-        <video :src="video.url" class="video" v-if="video"></video>
+        <div class="video">
+          <video :src="video.url" class="preview" v-if="video"></video>
+        </div>
+        <div class="daily">
+          <div class="title">运行日志</div>
+          <div class="console" v-html="console"></div>
+        </div>
       </div>
       <div class="tools">
         <div class="item" data-key="当前时间：">{{ form.date }}</div>
@@ -86,7 +92,8 @@ export default {
         ip: "",
         speed: "",
         status: ""
-      }
+      },
+      console: '<div class="p">视频启动中...</div>'
     };
   },
   mounted() {
@@ -134,13 +141,14 @@ export default {
     },
 
     videoList() {
+      const console = this.console;
       GetVideo()
         .then(({ data }) => {
           console.log(data);
           this.video = data;
         })
         .catch(err => {
-          alert(err);
+          this.console = `${console}<div class="p">${err}</div>`;
         });
     }
   }
@@ -159,7 +167,6 @@ export default {
       height: calc(100vh - 92px);
       .info {
         border: solid 1px #ccc;
-        background-color: #fff;
         padding: 8px 15px 15px;
         margin-bottom: 10px;
         .title {
@@ -175,7 +182,7 @@ export default {
             font-size: 18px;
             line-height: 36px;
             text-align: center;
-            background-color: #fff;
+            background-color: #f5f5f5;
             color: #7d7d7d;
             width: 80px;
             margin: -18px auto 0;
@@ -225,7 +232,6 @@ export default {
       }
       .bar {
         border: solid 1px #ccc;
-        background-color: #fff;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -251,9 +257,34 @@ export default {
       flex: 1;
       width: 1%;
       margin-left: 10px;
-      background-color: #000;
       .video {
-        height: 570px;
+        height: calc(100vh - 363px);
+        background-color: #fff;
+        border: solid 1px #ccc;
+        .preview {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .daily {
+        margin-top: 26px;
+        border: solid 1px #ccc;
+        .title {
+          width: 80px;
+          text-align: center;
+          line-height: 32px;
+          height: 32px;
+          background-color: #f5f5f5;
+          margin: -16px 0 0 10px;
+        }
+        .console {
+          height: 200px;
+          background-color: #000;
+          padding: 5px 8px;
+          margin: 5px 10px 10px;
+          overflow: hidden;
+          overflow-y: auto;
+        }
       }
     }
     .tools {

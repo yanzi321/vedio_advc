@@ -46,4 +46,10 @@ textarea {
     background-color: transparent;
   }
 }
+.p {
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 3px 0;
+}
 </style>
