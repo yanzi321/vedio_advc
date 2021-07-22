@@ -93,15 +93,16 @@ export default {
         speed: "",
         status: ""
       },
-      console: '<div class="p">视频启动中...</div>'
+      console: ""
     };
   },
-  mounted() {
-    this.init();
-    this.getTime();
-    this.newWordSpeed();
-    this.getIp();
-    this.videoList();
+  async mounted() {
+    this.print("视频启动中...");
+    await this.init();
+    await this.getTime();
+    await this.newWordSpeed();
+    await this.getIp();
+    await this.videoList();
   },
   methods: {
     init() {
@@ -109,6 +110,21 @@ export default {
         data.surplus = Number(data.surplus);
         this.user = data;
       });
+    },
+
+    print(text) {
+      const a = new Date();
+      const month = a.getMonth() + 1;
+      const day = a.getDate();
+      const hour = a.getHours();
+      const minute = a.getMinutes();
+      const seconds = a.getSeconds();
+      const content = this.console;
+      this.console = `${content}<div class="p">${a.getFullYear()}-${
+        month < 10 ? "0" + month : month
+      }-${day < 10 ? "0" + day : day} ${hour < 10 ? "0" + hour : hour}:${
+        minute < 10 ? "0" + minute : minute
+      }:${seconds < 10 ? "0" + seconds : seconds} ${text}</div>`;
     },
 
     getTime() {
@@ -148,7 +164,7 @@ export default {
           this.video = data;
         })
         .catch(err => {
-          this.console = `${console}<div class="p">${err}</div>`;
+          this.print(err);
         });
     }
   }
