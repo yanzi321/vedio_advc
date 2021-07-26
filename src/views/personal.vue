@@ -27,19 +27,19 @@
           <div class="title">收益情况</div>
           <div class="list">
             <div class="item">
-              <div class="value">0.00</div>
+              <div class="value">{{ user.hours_profit }}</div>
               <div class="label">每小时收益（元）</div>
             </div>
             <div class="item">
-              <div class="value">0.00</div>
+              <div class="value">{{ user.days_profit }}</div>
               <div class="label">今天收益（元）</div>
             </div>
             <div class="item">
-              <div class="value">0.00</div>
+              <div class="value">{{ user.months_profit }}</div>
               <div class="label">本月收益（元）</div>
             </div>
             <div class="item">
-              <div class="value">0.00</div>
+              <div class="value">{{ user.profit }}</div>
               <div class="label">账户总收益（元）</div>
             </div>
           </div>

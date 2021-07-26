@@ -62,12 +62,25 @@
       </div>
       <div class="colR">
         <div class="video">
-          <video
+            <div class="clock"></div>
+            <iframe
+                class="preview"
+                v-if="video"
+                :src="video.url"
+                autoplay = true
+                scrolling="no"
+                border="0"
+                frameborder="no"
+                framespacing="0"
+                allowfullscreen="true"
+            >
+            </iframe>
+          <!-- <video
             id="videoPlayer"
             ref="videoPlayer"
             :src="video"
             class="preview"
-          ></video>
+          ></video> -->
         </div>
         <div class="daily">
           <div class="title">运行日志</div>
@@ -83,25 +96,63 @@
         <div class="item" data-key="客户端版本：">v1.0.0</div>
       </div>
     </div>
+    <!-- <el-dialog
+            title="输入验证码"
+            width="400px"
+            :visible.sync="modal"
+            @close="modal = false"
+        >
+            <div style="margin-bottom: 10px">
+                <img
+                    :src="`http://advpc.muke.design/api/frontend/captcha?time=${time}`"
+                    class="codeImage"
+                    alt=""
+                    @click="renderImage"
+                />
+            </div>
+            <el-form ref="form" :model="form1">
+                <el-input
+                    v-model="form1.code"
+                    placeholder="请输入图片验证码"
+                    maxlength="6"
+                >
+                </el-input>
+                <el-button
+                    type="primary"
+                    :style="{ width: '100%', margin: '10px 0' }"
+                    :disabled="form1.code === ''"
+                    @click="okk"
+                    >验证</el-button
+                >
+            </el-form>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
-import { UserInfo, GetVideo, GetIp, ChinaIp } from "@/services/api";
+import { UserInfo, GetVideo, GetIp, ChinaIp, GetTimeVideo, CheckCaptcha, } from "@/services/api";
 export default {
   data() {
     return {
       user: null,
-      video: null,
+      video: {
+          play_time: 0
+      },
+      modal: false,
       timer: null,
+      videoTimer: null,
+      time: null,
       form: {
         date: "",
         ip: "",
         speed: "",
         status: ""
       },
+      form1:{
+        code:''
+      },
       console: "",
-      isDisable: true,
+      isDisable: false,
       status: true
     };
   },
@@ -110,7 +161,7 @@ export default {
     await this.init();
     await this.getTime();
     await this.newWordSpeed();
-    await this.videoList();
+    // await this.videoList();
   },
   methods: {
     init() {
@@ -147,6 +198,7 @@ export default {
       }时${minute < 10 ? "0" + minute : minute}分`;
     },
 
+
     getIp() {
       GetIp().then(({ origin }) => {
         this.form.ip = origin;
@@ -154,7 +206,7 @@ export default {
           ip: origin
         }).then(({ data }) => {
           if (data.country_id === "CN") {
-            this.isDisable = true;
+            this.isDisable = false;
             this.print(
               `当前IP：${data.queryIp}，位置：${data.country} ${data.region} ${data.city} ${data.isp}，请使用代理`
             );
@@ -171,28 +223,84 @@ export default {
         that.form.status = navigator.onLine ? "在线" : "断线";
         that.getTime();
         that.newWordSpeed();
-        that.getIp();
+
+        // that.getIp();
       }, 5000);
     },
 
     videoList() {
       const console = this.console;
       GetVideo()
-        .then(({ data }) => {
-          this.video = data.url;
-          this.isDisable = false;
-          this.print("视频启动成功");
+        .then((res) => {
+            // if (res == null) {
+            //     this.videoTime();
+            // }
+            this.video = res.data;
+            this.setIntervalFun();
+            // this.video = res.url;
+            // this.isDisable = false;
+            // this.print("视频启动成功");
         })
         .catch(err => {
+        this.videoList();
+          this.modal = true;
           this.print(err);
         });
     },
 
-    startVideo() {
-      this.status = false;
-      document.getElementById("videoPlayer").play();
-      this.print("视频开始播放");
+    okk() {
+        let form = this.form1;
+            CheckCaptcha({code: form.code}).then((res) => {
+                form.code = res.date
+                this.modal1=false
+                // this.videoTime();
+        });
     },
+
+    renderImage() {
+        this.time = new Date().getTime();
+    },
+
+
+    startVideo() {
+        // 播放视频
+        this.videoList();
+        this.print("视频播放中...");
+    //   this.status = false;
+    //   document.getElementById("videoPlayer").play();
+    //   this.print("视频开始播放");
+    },
+
+    renderImage() {
+        this.time = new Date().getTime();
+    },
+
+    // 视频时间间隔
+    videoTime() {
+        GetTimeVideo()
+            .then((res) => {
+                this.video = res.data;
+            })
+            .catch((err) => {
+                this.print(err);
+            });
+    },
+
+    // 设置定时器
+    setIntervalFun() {
+        // console.log(this.video)
+        const that = this;
+        let timeNum = 0;
+        that.videoTimer = setInterval(() => {
+            timeNum++;
+            if (timeNum >= Number(that.video.play_time)) {
+                clearInterval(that.videoTimer);
+                that.videoList();
+            }
+        }, 1000);
+        this.print("视频播放中...");
+    },
+
 
     stopVideo() {
       this.status = true;
@@ -309,6 +417,16 @@ export default {
         height: calc(100vh - 363px);
         background-color: #fff;
         border: solid 1px #ccc;
+        margin: 0; 
+        position: relative;
+        .clock {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          z-index: 999; 
+          outline: 0; 
+          background: rgba(255, 255, 255, 0);
+        }
         .preview {
           width: 100%;
           height: 100%;

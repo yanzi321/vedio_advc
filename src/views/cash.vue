@@ -17,6 +17,9 @@
       <el-form-item prop="account" label="提现账号：">
         <el-input v-model="form.account"></el-input>
       </el-form-item>
+      <el-form-item prop="safety" label="安全码：">
+        <el-input v-model="form.safety"></el-input>
+      </el-form-item>
       <el-form-item prop="amount" label="提现金额：">
         <el-input-number
           v-model="form.amount"
@@ -59,6 +62,7 @@ export default {
         type_id: "",
         name: "",
         account: "",
+        safety: "",
         amount: "",
         code: ""
       },
@@ -71,6 +75,7 @@ export default {
         account: [
           { required: true, message: "请输入提现账号", trigger: "blur" }
         ],
+        safety: [{ required: true, message: "请输入安全码", trigger: "blur" }],
         amount: [
           { required: true, message: "请输入提现金额", trigger: "blur" }
         ],

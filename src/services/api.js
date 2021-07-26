@@ -13,6 +13,10 @@ export const UserInfo = data =>
 export const GetVideo = data =>
   HTTP(`${domain}/api/frontend/video-url`, data, "get");
 
+// 获取间隔播放
+export const GetTimeVideo = data =>
+  HTTP(`${domain}/api/frontend/check-video-url`, data, "post");
+
 // 用户协议
 export const GetRules = data =>
   HTTP(`${domain}/api/frontend/rules`, data, "get");
