@@ -30,3 +30,5 @@ export const DoCash = data => HTTP(`${domain}/api/frontend/cash-out`, data);
 
 // 获取公网IP
 export const GetIp = data => HTTP(`http://httpbin.org/ip`, data, "get");
+
+export const ChinaIp = data => HTTP(`https://api.5ics.cn/h5/qs/ip`, data);

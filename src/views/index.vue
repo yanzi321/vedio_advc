@@ -1,52 +1,73 @@
 <template>
   <div class="home-page">
     <div class="main">
-      <div class="colL" v-if="user">
-        <div class="info">
-          <div class="title">用户信息</div>
-          <router-link to="/personal" target="_blank" class="box">
-            <div class="key">账号</div>
-            <div class="value">{{ user.email }}</div>
-          </router-link>
-          <div class="box">
-            <div class="key">余额</div>
-            <div class="value">{{ user.surplus }}元</div>
+      <div class="colL">
+        <template v-if="user">
+          <div class="info">
+            <div class="title">用户信息</div>
+            <router-link to="/personal" target="_blank" class="box">
+              <div class="key">账号</div>
+              <div class="value">{{ user.email }}</div>
+            </router-link>
+            <div class="box">
+              <div class="key">余额</div>
+              <div class="value">{{ user.surplus }}元</div>
+            </div>
+            <router-link to="/cash" target="_blank" class="btn"
+              >我要提现</router-link
+            >
           </div>
-          <div class="btn" @click="modal = true">我要提现</div>
-        </div>
-        <div class="info" style="height: calc(100vh - 555px)">
-          <div class="title">运行信息</div>
-          <div class="list">
-            <div class="item">
-              <div class="key">小时收益：</div>
-              <div class="value">{{ user.hours_profit }}</div>
-            </div>
-            <div class="item">
-              <div class="key">当日收益：</div>
-              <div class="value">{{ user.days_profit }}</div>
-            </div>
-            <div class="item">
-              <div class="key">本月收益：</div>
-              <div class="value">{{ user.months_profit }}</div>
-            </div>
-            <div class="item">
-              <div class="key">运行状态：</div>
-              <div class="status">停止</div>
-            </div>
-            <div class="item">
-              <div class="key">在线时长：</div>
-              <div class="value">{{ user.today_login }}</div>
+          <div class="info" style="height: calc(100vh - 555px)">
+            <div class="title">运行信息</div>
+            <div class="list">
+              <div class="item">
+                <div class="key">小时收益：</div>
+                <div class="value">{{ user.hours_profit }}</div>
+              </div>
+              <div class="item">
+                <div class="key">当日收益：</div>
+                <div class="value">{{ user.days_profit }}</div>
+              </div>
+              <div class="item">
+                <div class="key">本月收益：</div>
+                <div class="value">{{ user.months_profit }}</div>
+              </div>
+              <div class="item">
+                <div class="key">运行状态：</div>
+                <div class="status">停止</div>
+              </div>
+              <div class="item">
+                <div class="key">在线时长：</div>
+                <div class="value">{{ user.today_login }}</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="bar">
-          <div class="btn">启动</div>
-          <div class="btn">停止</div>
-        </div>
+          <div class="bar">
+            <template v-if="isDisable">
+              <div class="btn disabled">启动</div>
+              <div class="btn disabled">停止</div>
+            </template>
+            <template v-else>
+              <template v-if="status">
+                <div class="btn" @click="startVideo">启动</div>
+                <div class="btn disabled">停止</div>
+              </template>
+              <template v-else>
+                <div class="btn disabled">启动</div>
+                <div class="btn" @click="stopVideo">停止</div>
+              </template>
+            </template>
+          </div>
+        </template>
       </div>
       <div class="colR">
         <div class="video">
-          <video :src="video.url" class="preview" v-if="video"></video>
+          <video
+            id="videoPlayer"
+            ref="videoPlayer"
+            :src="video"
+            class="preview"
+          ></video>
         </div>
         <div class="daily">
           <div class="title">运行日志</div>
@@ -62,30 +83,16 @@
         <div class="item" data-key="客户端版本：">v1.0.0</div>
       </div>
     </div>
-    <!-- 申请提现 -->
-    <el-dialog
-      title="提现申请"
-      width="600px"
-      :visible.sync="modal"
-      @close="modal = false"
-    >
-      <cash v-if="modal" :user="user" @close="modal = false"></cash>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { UserInfo, GetVideo, GetIp } from "@/services/api";
-import Cash from "@/components/cash";
+import { UserInfo, GetVideo, GetIp, ChinaIp } from "@/services/api";
 export default {
-  components: {
-    Cash
-  },
   data() {
     return {
       user: null,
       video: null,
-      modal: false,
       timer: null,
       form: {
         date: "",
@@ -93,7 +100,9 @@ export default {
         speed: "",
         status: ""
       },
-      console: ""
+      console: "",
+      isDisable: true,
+      status: true
     };
   },
   async mounted() {
@@ -101,7 +110,6 @@ export default {
     await this.init();
     await this.getTime();
     await this.newWordSpeed();
-    await this.getIp();
     await this.videoList();
   },
   methods: {
@@ -142,6 +150,16 @@ export default {
     getIp() {
       GetIp().then(({ origin }) => {
         this.form.ip = origin;
+        ChinaIp({
+          ip: origin
+        }).then(({ data }) => {
+          if (data.country_id === "CN") {
+            this.isDisable = true;
+            this.print(
+              `当前IP：${data.queryIp}，位置：${data.country} ${data.region} ${data.city} ${data.isp}，请使用代理`
+            );
+          }
+        });
       });
     },
 
@@ -153,19 +171,33 @@ export default {
         that.form.status = navigator.onLine ? "在线" : "断线";
         that.getTime();
         that.newWordSpeed();
-      }, 1000);
+        that.getIp();
+      }, 5000);
     },
 
     videoList() {
       const console = this.console;
       GetVideo()
         .then(({ data }) => {
-          console.log(data);
-          this.video = data;
+          this.video = data.url;
+          this.isDisable = false;
+          this.print("视频启动成功");
         })
         .catch(err => {
           this.print(err);
         });
+    },
+
+    startVideo() {
+      this.status = false;
+      document.getElementById("videoPlayer").play();
+      this.print("视频开始播放");
+    },
+
+    stopVideo() {
+      this.status = true;
+      document.getElementById("videoPlayer").pause();
+      this.print("视频暂停播放");
     }
   }
 };
@@ -263,8 +295,8 @@ export default {
           font-weight: bold;
           background: -webkit-linear-gradient(bottom, #f1f1f1, #fff);
           cursor: pointer;
-          &:nth-child(2) {
-            color: #848484;
+          &.disabled {
+            opacity: 0.5;
           }
         }
       }
@@ -280,6 +312,7 @@ export default {
         .preview {
           width: 100%;
           height: 100%;
+          background-color: #fff;
         }
       }
       .daily {

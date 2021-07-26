@@ -37,6 +37,13 @@ const routes = [
       auth: false
     },
     component: () => import("@/views/rules/privacy")
+  },
+  {
+    path: "/cash",
+    meta: {
+      auth: true
+    },
+    component: () => import("@/views/cash")
   }
 ];
 

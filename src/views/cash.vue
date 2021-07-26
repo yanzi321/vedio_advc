@@ -45,23 +45,14 @@
         <el-button type="primary" :loading="loading" @click="start"
           >提交</el-button
         >
-        <el-button @click="closeModal">退出</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { GetCashType, DoCash } from "@/services/api";
+import { GetCashType, DoCash, UserInfo } from "@/services/api";
 export default {
-  props: {
-    user: {
-      type: Object,
-      default() {
-        return null;
-      }
-    }
-  },
   data() {
     return {
       form: {
@@ -86,7 +77,8 @@ export default {
         code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
       },
       loading: false,
-      time: null
+      time: null,
+      user: null
     };
   },
   mounted() {
@@ -95,9 +87,16 @@ export default {
   },
   methods: {
     init() {
-      GetCashType().then(({ data }) => {
-        this.cashArray = data.data;
-      });
+      UserInfo()
+        .then(({ data }) => {
+          data.surplus = Number(data.surplus);
+          this.user = data;
+        })
+        .then(() => {
+          GetCashType().then(({ data }) => {
+            this.cashArray = data.data;
+          });
+        });
     },
 
     start() {
@@ -120,12 +119,12 @@ export default {
 
     renderImage() {
       this.time = new Date().getTime();
-    },
-
-    closeModal() {
-      this.$emit("close");
     }
   }
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.cash {
+  padding: 20px;
+}
+</style>

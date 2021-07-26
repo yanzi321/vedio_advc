@@ -17,7 +17,9 @@
             <div class="key">余额</div>
             <div class="value">{{ user.surplus }}元</div>
           </div>
-          <div class="btn" @click="modal = true">我要提现</div>
+          <router-link to="/cash" target="_blank" class="btn"
+            >我要提现</router-link
+          >
         </div>
       </div>
       <div class="colR">
@@ -84,26 +86,12 @@
         </div>
       </div>
     </div>
-
-    <!-- 申请提现 -->
-    <el-dialog
-      title="提现申请"
-      width="600px"
-      :visible.sync="modal"
-      @close="modal = false"
-    >
-      <cash v-if="modal" :user="user" @close="modal = false"></cash>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { UserInfo } from "@/services/api";
-import Cash from "@/components/cash";
 export default {
-  components: {
-    Cash
-  },
   data() {
     return {
       user: null,

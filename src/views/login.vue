@@ -38,10 +38,10 @@
           />
         </el-form-item>
         <div>
-          <el-checkbox>记住密码</el-checkbox>
+          <el-checkbox v-model="forget">记住密码</el-checkbox>
         </div>
         <div :style="{ paddingBottom: '15px', display: 'flex' }">
-          <el-checkbox>我已阅读同意</el-checkbox>
+          <el-checkbox v-model="agree">我已阅读同意</el-checkbox>
           <router-link to="/rules/user" target="_blank" class="link"
             >《用户协议》</router-link
           >
@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-import { UserLogin, CheckCaptcha } from "@/services/api";
+import { UserLogin, CheckCaptcha, GetIp, ChinaIp } from "@/services/api";
 export default {
   components: {},
   data() {
@@ -77,14 +77,24 @@ export default {
         password: "admin",
         code: ""
       },
+      ip: "",
+      agree: true,
+      forget: true,
       time: null,
       loading: false
     };
   },
   mounted() {
+    this.getIp();
     this.renderImage();
   },
   methods: {
+    getIp() {
+      GetIp().then(({ origin }) => {
+        this.ip = origin;
+      });
+    },
+
     login() {
       const form = this.form;
       this.loading = true;
@@ -92,19 +102,28 @@ export default {
         code: form.code
       })
         .then(() => {
-          UserLogin(form)
-            .then(({ data }) => {
-              this.loading = false;
-              localStorage.video_token = data.token;
-              this.$router.push("/");
-            })
-            .catch(err => {
-              this.loading = false;
-              alert(err);
-            });
+          ChinaIp({
+            ip: this.ip
+          }).then(({ data }) => {
+            if (data.country_id !== "CN") {
+              return alert("请先开启代理服务");
+            }
+            UserLogin(form)
+              .then(({ data }) => {
+                this.loading = false;
+                localStorage.video_token = data.token;
+                this.$router.push("/");
+              })
+              .catch(err => {
+                this.loading = false;
+                this.renderImage();
+                alert(err);
+              });
+          });
         })
         .catch(err => {
           this.loading = false;
+          this.renderImage();
           alert(err);
         });
     },
