@@ -19,24 +19,28 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item
-          :style="{ marginBottom: '10px', position: 'relative' }"
-          label=""
-        >
-          <el-input
-            v-model="form.code"
-            placeholder="请输入图片验证码"
-            prefix-icon="el-icon-message"
-            maxlength="6"
+        <template v-if="isShow">
+          <el-form-item
+            :style="{ marginBottom: '10px', position: 'relative' }"
+            label=""
           >
-          </el-input>
-          <img
-            :src="`http://advpc.muke.design/api/frontend/captcha?time=${time}`"
-            class="codeImage"
-            alt=""
-            @click="renderImage"
-          />
-        </el-form-item>
+            <el-input
+              v-model="form.code"
+              placeholder="请输入图片验证码"
+              prefix-icon="el-icon-message"
+              maxlength="6"
+            >
+            </el-input>
+            <img
+              :src="
+                `http://advpc.muke.design/api/frontend/captcha?time=${time}`
+              "
+              class="codeImage"
+              alt=""
+              @click="renderImage"
+            />
+          </el-form-item>
+        </template>
         <div>
           <el-checkbox v-model="forget">记住密码</el-checkbox>
         </div>
@@ -54,11 +58,7 @@
           type="primary"
           :loading="loading"
           :style="{ width: '100%' }"
-          :disabled="
-            form.email.length === 0 ||
-              form.password.length === 0 ||
-              form.code.length === 0
-          "
+          :disabled="form.email.length === 0 || form.password.length === 0"
           @click="login"
           >登录</el-button
         >
@@ -81,7 +81,9 @@ export default {
       agree: true,
       forget: true,
       time: null,
-      loading: false
+      loading: false,
+      isShow: false,
+      count: 0
     };
   },
   mounted() {
@@ -97,35 +99,61 @@ export default {
 
     login() {
       const form = this.form;
+      const count = this.count;
       this.loading = true;
-      CheckCaptcha({
-        code: form.code
-      })
-        .then(() => {
-          ChinaIp({
-            ip: this.ip
-          }).then(({ data }) => {
-            if (data.country_id !== "CN") {
-              return alert("请先开启代理服务");
-            }
-            UserLogin(form)
-              .then(({ data }) => {
-                this.loading = false;
-                localStorage.video_token = data.token;
-                this.$router.push("/");
-              })
-              .catch(err => {
-                this.loading = false;
-                this.renderImage();
-                alert(err);
-              });
-          });
+      if (count >= 5) {
+        CheckCaptcha({
+          code: form.code
         })
-        .catch(err => {
-          this.loading = false;
-          this.renderImage();
-          alert(err);
+          .then(() => {
+            ChinaIp({
+              ip: this.ip
+            }).then(({ data }) => {
+              if (data.country_id === "CN") {
+                this.loading = false;
+                return alert("请先开启代理服务");
+              }
+              UserLogin(form)
+                .then(({ data }) => {
+                  this.loading = false;
+                  localStorage.video_token = data.token;
+                  this.$router.push("/");
+                })
+                .catch(err => {
+                  this.count = this.count + 1;
+                  this.loading = false;
+                  this.renderImage();
+                  alert(err);
+                });
+            });
+          })
+          .catch(err => {
+            this.loading = false;
+            this.renderImage();
+            alert(err);
+          });
+      } else {
+        ChinaIp({
+          ip: this.ip
+        }).then(({ data }) => {
+          if (data.country_id === "CN") {
+            this.loading = false;
+            return alert("请先开启代理服务");
+          }
+          UserLogin(form)
+            .then(({ data }) => {
+              this.loading = false;
+              localStorage.video_token = data.token;
+              this.$router.push("/");
+            })
+            .catch(err => {
+              this.count = this.count + 1;
+              this.loading = false;
+              this.renderImage();
+              alert(err);
+            });
         });
+      }
     },
 
     renderImage() {

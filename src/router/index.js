@@ -44,6 +44,13 @@ const routes = [
       auth: true
     },
     component: () => import("@/views/cash")
+  },
+  {
+    path: "/bulletin",
+    meta: {
+      auth: true
+    },
+    component: () => import("@/views/bulletin")
   }
 ];
 

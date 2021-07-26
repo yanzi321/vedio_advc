@@ -126,11 +126,22 @@
                 >
             </el-form>
     </el-dialog> -->
+
+
+    <el-dialog
+      title="公告"
+      :visible.sync="dialogVisible"
+      width="30%"
+      @closed="closeModal"
+    >
+      <div>{{ advContent }}</div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { UserInfo, GetVideo, GetIp, ChinaIp, GetTimeVideo, CheckCaptcha, } from "@/services/api";
+
 export default {
   data() {
     return {
@@ -152,18 +163,31 @@ export default {
         code:''
       },
       console: "",
+
       isDisable: false,
       status: true
+
     };
   },
   async mounted() {
     this.print("视频启动中...");
+    const video_status = localStorage.is_modal || null;
+    if (!video_status) {
+      await this.bulletin();
+    }
     await this.init();
     await this.getTime();
     await this.newWordSpeed();
     // await this.videoList();
   },
   methods: {
+    bulletin() {
+      GetBulletin().then(({ data }) => {
+        this.advContent = data.content;
+        this.dialogVisible = true;
+      });
+    },
+
     init() {
       UserInfo().then(({ data }) => {
         data.surplus = Number(data.surplus);
@@ -229,7 +253,6 @@ export default {
     },
 
     videoList() {
-      const console = this.console;
       GetVideo()
         .then((res) => {
             // if (res == null) {
@@ -306,6 +329,11 @@ export default {
       this.status = true;
       document.getElementById("videoPlayer").pause();
       this.print("视频暂停播放");
+    },
+
+    closeModal() {
+      this.dialogVisible = false;
+      localStorage.is_modal = 1;
     }
   }
 };
