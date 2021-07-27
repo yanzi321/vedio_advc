@@ -65,7 +65,7 @@
       width="30%"
       @closed="closeModal"
     >
-      <div v-html="msg" :data="msg"></div>
+      <div v-html="msg.value"></div>
     </el-dialog>
 
 
@@ -87,7 +87,7 @@ export default {
       },
       cashArray: [],
       dialog: false,
-      msg: [],
+      msg: {},
       rules: {
         type_id: [
           { required: true, message: "请选择提现方式", trigger: "change" }
@@ -148,7 +148,8 @@ export default {
     moneyMsg() {
         this.dialog = true;
         GetCashMsg().then((res) => {
-        this.msg = res.data;
+            console.log(res.data)
+        this.msg = res.data[3]
       });
     },
 

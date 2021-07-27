@@ -34,7 +34,8 @@
               </div>
               <div class="item">
                 <div class="key">运行状态：</div>
-                <div class="status">停止</div>
+                <div class="status" v-if="status">启动</div>
+                <div class="status" v-else>停止</div>
               </div>
               <div class="item">
                 <div class="key">在线时长：</div>
@@ -262,9 +263,7 @@ export default {
         .then((res) => {
             this.video = res.data;
             this.setIntervalFun();
-            if (res.msg == "现在不可开启任务") {
-                this.videoTime();
-            }
+            
             // this.video = res.url;
             // this.isDisable = false;
             // this.print("视频启动成功");
@@ -286,6 +285,7 @@ export default {
     },
 
     startVideo() {
+        this.status = true
         // 播放视频
         this.videoList();
         this.print("视频播放中...");
@@ -326,7 +326,7 @@ export default {
 
 
     stopVideo() {
-      this.status = true;
+      this.status = false;
       document.getElementById("videoPlayer").pause();
       this.print("视频暂停播放");
     },
