@@ -100,6 +100,8 @@
             title="输入验证码"
             width="400px"
             :visible.sync="modal"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
             @close="modal = false"
         >
             <div style="margin-bottom: 10px">
