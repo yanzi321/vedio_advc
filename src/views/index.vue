@@ -67,7 +67,7 @@
             <iframe
                 class="preview"
                 v-if="video"
-                :srcVideo="video.url"
+                :src="video.url"
                 autoplay = true
                 scrolling="no"
                 border="0"
@@ -262,9 +262,9 @@ export default {
         .then((res) => {
             this.video = res.data;
             this.setIntervalFun();
-            // if (res == null) {
-            //     this.videoTime();
-            // }
+            if (res.msg == "现在不可开启任务") {
+                this.videoTime();
+            }
             // this.video = res.url;
             // this.isDisable = false;
             // this.print("视频启动成功");
@@ -300,7 +300,7 @@ export default {
 
     // 视频时间间隔
     videoTime() {
-        GetTimeVideo({code : this.form1.code})
+        GetTimeVideo()
             .then((res) => {
                 this.video = res.data;
             })

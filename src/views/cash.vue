@@ -10,6 +10,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
+        <el-button @click="moneyMsg">提现说明</el-button>
       </el-form-item>
       <el-form-item prop="name" label="姓名：">
         <el-input v-model="form.name"></el-input>
@@ -49,12 +50,30 @@
           >提交</el-button
         >
       </el-form-item>
+
+      <el-form-item :style="{ marginTop: '20px' }">
+        <el-button  @click="moneyHistory"
+          >提现记录</el-button
+        >
+      </el-form-item>
     </el-form>
+
+
+    <el-dialog
+      title="提现说明"
+      :visible.sync="dialog"
+      width="30%"
+      @closed="closeModal"
+    >
+      <div v-html="msg" :data="msg"></div>
+    </el-dialog>
+
+
   </div>
 </template>
 
 <script>
-import { GetCashType, DoCash, UserInfo } from "@/services/api";
+import { GetCashType, DoCash, UserInfo, GetCashMsg } from "@/services/api";
 export default {
   data() {
     return {
@@ -67,6 +86,8 @@ export default {
         code: ""
       },
       cashArray: [],
+      dialog: false,
+      msg: [],
       rules: {
         type_id: [
           { required: true, message: "请选择提现方式", trigger: "change" }
@@ -121,6 +142,23 @@ export default {
             });
         }
       });
+    },
+
+    //提现说明
+    moneyMsg() {
+        this.dialog = true;
+        GetCashMsg().then((res) => {
+        this.msg = res.data;
+      });
+    },
+
+    //提现记录
+    moneyHistory() {
+        this.$router.push("/personal")
+    },
+
+    closeModal() {
+      this.dialog = false;
     },
 
     renderImage() {

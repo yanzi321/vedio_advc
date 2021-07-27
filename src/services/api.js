@@ -29,6 +29,14 @@ export const CheckCaptcha = data =>
 export const GetCashType = data =>
   HTTP(`${domain}/api/frontend/exchange-type`, data, "get");
 
+// 提现列表
+export const GetCashList = data =>
+HTTP(`${domain}/api/frontend/cash-out`, data, "get");
+
+// 提现说明
+export const GetCashMsg = data =>
+HTTP(`${domain}/api/frontend/rules`, data, "get");
+
 // 提现
 export const DoCash = data => HTTP(`${domain}/api/frontend/cash-out`, data);
 
