@@ -318,7 +318,7 @@ export default {
             timeNum++;
             if (timeNum >= Number(that.video.play_time)) {
                 clearInterval(that.videoTimer);
-                that.videoList();
+                // that.videoList();
             }
         }, 1000);
         this.print("视频播放中...");
