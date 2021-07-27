@@ -99,13 +99,21 @@
             width="30%"
             @closed="closeModal"
         >
-        <el-table :data="tableData" height="250" border style="width: 100%">
+        <el-table :data="tableData" height="500" border style="width: 100%">
             <el-table-column prop="id" label="id" width="180">
                 
             </el-table-column>
-            <el-table-column prop="created_at" label="提现申请时间" width="180">
+            <el-table-column prop="created_at" label="提现申请时间">
             </el-table-column>
             <el-table-column prop="updated_at" label="提现成功时间"> </el-table-column>
+            <el-table-column prop="type_id" label="提现方式"> </el-table-column>
+            <el-table-column prop="user_id" label="账号"> </el-table-column>
+            <el-table-column prop="name" label="姓名"> </el-table-column>
+            <el-table-column prop="updated_at" label="提现金额"> </el-table-column>
+            <el-table-column prop="account" label="剩余余额"> </el-table-column>
+            <el-table-column prop="states" label="审核状态"> </el-table-column>
+            <el-table-column prop="remark" label="备注"> </el-table-column>
+
         </el-table>
         </el-dialog>
     </div>

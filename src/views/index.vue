@@ -328,7 +328,7 @@ export default {
 
     stopVideo() {
       this.status = false;
-      document.getElementById("videoPlayer").pause();
+    //   document.getElementById("videoPlayer").pause();
       this.print("视频暂停播放");
     },
 
