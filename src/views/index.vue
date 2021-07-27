@@ -158,6 +158,7 @@ export default {
       videoTimer: null,
       dialogVisible: false,
       advContent: "",
+      isActive: false,
       time: null,
       form: {
         date: "",
@@ -328,6 +329,8 @@ export default {
 
     stopVideo() {
       this.status = false;
+      this.video = {}
+      clearInterval(this.videoTimer);
     //   document.getElementById("videoPlayer").pause();
       this.print("视频暂停播放");
     },
