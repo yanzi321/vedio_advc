@@ -48,14 +48,15 @@
               <div class="btn disabled">停止</div>
             </template> -->
             <!-- <template v-else> -->
-              <template v-if="status">
+              <!-- <template v-if="status"> -->
+              <template>
                 <div class="btn" @click="startVideo">启动</div>
-                <div class="btn disabled">停止</div>
+                <div class="btn"  @click="stopVideo">停止</div>
               </template>
-              <template v-else>
+              <!-- <template v-else>
                 <div class="btn disabled">启动</div>
                 <div class="btn" @click="stopVideo">停止</div>
-              </template>
+              </template> -->
             <!-- </template> -->
           </div>
         </template>
@@ -182,7 +183,7 @@ export default {
     await this.init();
     await this.getTime();
     await this.newWordSpeed();
-    // await this.videoList();
+    // await this.videoTime();
   },
   methods: {
     bulletin() {
@@ -259,11 +260,11 @@ export default {
     videoList() {
       GetVideo()
         .then((res) => {
-            if (res == null) {
-                this.videoTime();
-            }
             this.video = res.data;
             this.setIntervalFun();
+            // if (res == null) {
+            //     this.videoTime();
+            // }
             // this.video = res.url;
             // this.isDisable = false;
             // this.print("视频启动成功");
@@ -277,19 +278,12 @@ export default {
     okk() {
         let form = this.form1;
             CheckCaptcha({code: form.code}).then((res) => {
-                console.log(res)
-                form.code = res.date
-                if (res = null) {
-                    this.modal1=true
+                if (res.msg == "验证成功") {
+                    this.modal=false
                     this.videoTime();
                 }
         });
     },
-
-    renderImage() {
-        this.time = new Date().getTime();
-    },
-
 
     startVideo() {
         // 播放视频
@@ -306,7 +300,7 @@ export default {
 
     // 视频时间间隔
     videoTime() {
-        GetTimeVideo()
+        GetTimeVideo({code : this.form1.code})
             .then((res) => {
                 this.video = res.data;
             })
