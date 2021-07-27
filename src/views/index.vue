@@ -316,9 +316,10 @@ export default {
         let timeNum = 0;
         that.videoTimer = setInterval(() => {
             timeNum++;
+            console.log(timeNum)
             if (timeNum >= Number(that.video.play_time)) {
                 clearInterval(that.videoTimer);
-                // that.videoList();
+                that.videoList();
             }
         }, 1000);
         this.print("视频播放中...");
