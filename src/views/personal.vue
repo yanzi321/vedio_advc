@@ -49,7 +49,7 @@
           <div class="title">提现情况</div>
           <div class="list">
             <div class="item">
-              <div class="value">0.00</div>
+              <div class="value">{{ user.surplus }}</div>
               <div class="label">账户余额（元）</div>
             </div>
             <div class="item">

@@ -51,6 +51,7 @@ export async function HTTP(url = "", params = {}, methods = "post") {
       })
       .catch(err => {
         const response = err.response;
+        console.log(err.response)
         if (response.status === 401) {
           sessionStorage.clear();
           localStorage.clear();

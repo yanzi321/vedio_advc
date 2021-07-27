@@ -83,7 +83,7 @@ export default {
       },
       loading: false,
       time: null,
-      user: null
+      user: ""
     };
   },
   mounted() {
@@ -93,7 +93,8 @@ export default {
   methods: {
     init() {
       UserInfo()
-        .then(({ data }) => {
+        .then(({ data }) => { 
+          console.log(data)
           data.surplus = Number(data.surplus);
           this.user = data;
         })

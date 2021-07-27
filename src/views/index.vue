@@ -43,11 +43,11 @@
             </div>
           </div>
           <div class="bar">
-            <template v-if="isDisable">
+            <!-- <template v-if="isDisable">
               <div class="btn disabled">启动</div>
               <div class="btn disabled">停止</div>
-            </template>
-            <template v-else>
+            </template> -->
+            <!-- <template v-else> -->
               <template v-if="status">
                 <div class="btn" @click="startVideo">启动</div>
                 <div class="btn disabled">停止</div>
@@ -56,7 +56,7 @@
                 <div class="btn disabled">启动</div>
                 <div class="btn" @click="stopVideo">停止</div>
               </template>
-            </template>
+            <!-- </template> -->
           </div>
         </template>
       </div>
@@ -66,7 +66,7 @@
             <iframe
                 class="preview"
                 v-if="video"
-                :src="video.url"
+                :srcVideo="video.url"
                 autoplay = true
                 scrolling="no"
                 border="0"
@@ -96,7 +96,7 @@
         <div class="item" data-key="客户端版本：">v1.0.0</div>
       </div>
     </div>
-    <!-- <el-dialog
+    <el-dialog
             title="输入验证码"
             width="400px"
             :visible.sync="modal"
@@ -125,7 +125,7 @@
                     >验证</el-button
                 >
             </el-form>
-    </el-dialog> -->
+    </el-dialog>
 
 
     <el-dialog
@@ -152,6 +152,8 @@ export default {
       modal: false,
       timer: null,
       videoTimer: null,
+      dialogVisible: false,
+      advContent: "",
       time: null,
       form: {
         date: "",
@@ -172,9 +174,9 @@ export default {
   async mounted() {
     this.print("视频启动中...");
     const video_status = localStorage.is_modal || null;
-    if (!video_status) {
-      await this.bulletin();
-    }
+    // if (!video_status) {
+    //   await this.bulletin();
+    // }
     await this.init();
     await this.getTime();
     await this.newWordSpeed();
@@ -255,9 +257,9 @@ export default {
     videoList() {
       GetVideo()
         .then((res) => {
-            // if (res == null) {
-            //     this.videoTime();
-            // }
+            if (res == null) {
+                this.videoTime();
+            }
             this.video = res.data;
             this.setIntervalFun();
             // this.video = res.url;
@@ -265,7 +267,6 @@ export default {
             // this.print("视频启动成功");
         })
         .catch(err => {
-        this.videoList();
           this.modal = true;
           this.print(err);
         });
@@ -274,9 +275,12 @@ export default {
     okk() {
         let form = this.form1;
             CheckCaptcha({code: form.code}).then((res) => {
+                console.log(res)
                 form.code = res.date
-                this.modal1=false
-                // this.videoTime();
+                if (res = null) {
+                    this.modal1=true
+                    this.videoTime();
+                }
         });
     },
 
