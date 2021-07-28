@@ -32,7 +32,9 @@
             >
             </el-input>
             <img
-              :src="`http://advpc.muke.design/api/frontend/captcha?time=${time}`"
+              :src="
+                `http://advpc.muke.design/api/frontend/captcha?time=${time}`
+              "
               class="codeImage"
               alt=""
               @click="renderImage"
@@ -56,7 +58,9 @@
           type="primary"
           :loading="loading"
           :style="{ width: '100%' }"
-          :disabled="form.email.length === 0 || form.password.length === 0"
+          :disabled="
+            form.email.length === 0 || form.password.length === 0 || agree
+          "
           @click="login"
           >登录</el-button
         >
@@ -73,14 +77,14 @@ export default {
       form: {
         email: "Pu3QZKn4@163.com",
         password: "admin",
-        code: "",
+        code: ""
       },
       ip: "",
       agree: true,
       forget: true,
       time: null,
       loading: false,
-      count: 0,
+      count: 0
     };
   },
   mounted() {
@@ -100,11 +104,11 @@ export default {
       this.loading = true;
       if (count >= 5) {
         CheckCaptcha({
-          code: form.code,
+          code: form.code
         })
           .then(() => {
             ChinaIp({
-              ip: this.ip,
+              ip: this.ip
             }).then(({ data }) => {
               if (data.country_id === "CN") {
                 this.loading = false;
@@ -116,7 +120,7 @@ export default {
                   localStorage.video_token = data.token;
                   this.$router.push("/");
                 })
-                .catch((err) => {
+                .catch(err => {
                   this.count = this.count + 1;
                   this.loading = false;
                   this.renderImage();
@@ -124,14 +128,14 @@ export default {
                 });
             });
           })
-          .catch((err) => {
+          .catch(err => {
             this.loading = false;
             this.renderImage();
             alert(err);
           });
       } else {
         ChinaIp({
-          ip: this.ip,
+          ip: this.ip
         }).then(({ data }) => {
           if (data.country_id === "CN") {
             this.loading = false;
@@ -143,7 +147,7 @@ export default {
               localStorage.video_token = data.token;
               this.$router.push("/");
             })
-            .catch((err) => {
+            .catch(err => {
               this.count = this.count + 1;
               this.loading = false;
               this.renderImage();
@@ -155,8 +159,8 @@ export default {
 
     renderImage() {
       this.time = new Date().getTime();
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

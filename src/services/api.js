@@ -31,11 +31,11 @@ export const GetCashType = data =>
 
 // 提现列表
 export const GetCashList = data =>
-HTTP(`${domain}/api/frontend/cash-out`, data, "get");
+  HTTP(`${domain}/api/frontend/cash-out`, data, "get");
 
 // 提现说明
 export const GetCashMsg = data =>
-HTTP(`${domain}/api/frontend/rules`, data, "get");
+  HTTP(`${domain}/api/frontend/rules`, data, "get");
 
 // 提现
 export const DoCash = data => HTTP(`${domain}/api/frontend/cash-out`, data);
