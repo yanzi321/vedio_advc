@@ -119,6 +119,7 @@
                     v-model="form1.code"
                     placeholder="请输入图片验证码"
                     maxlength="6"
+                    @keyup.enter.native = "okk"
                 >
                 </el-input>
                 <el-button
