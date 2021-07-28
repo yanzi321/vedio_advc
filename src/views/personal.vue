@@ -44,6 +44,7 @@
             </div>
           </div>
         </div>
+        
 
         <div class="box">
           <div class="title">提现情况</div>
@@ -84,6 +85,7 @@
             </div>
           </div>
         </div>
+        <el-button @click="lookMoneyHisrory">提现记录</el-button>
       </div>
     </div>
 
