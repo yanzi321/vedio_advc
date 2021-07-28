@@ -54,11 +54,7 @@
                             <div class="value">{{ user.surplus }}</div>
                             <div class="label">账户余额（元）</div>
                         </div>
-                        <div
-                            class="item"
-                            @click="lookMoneyHisrory"
-                            style="cursor: pointer"
-                        >
+                        <div class="item">
                             <div class="value">{{ user.freezing_surplus }}</div>
                             <div class="label">已提现金额（元）</div>
                         </div>
@@ -90,8 +86,10 @@
                         </div>
                     </div>
                 </div>
+                <el-button @click="lookMoneyHisrory">提现记录</el-button>
             </div>
         </div>
+        
 
         <el-dialog
             title="提现记录"

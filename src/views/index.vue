@@ -96,6 +96,7 @@
         <div class="item" data-key="网络状态：">{{ form.status }}</div>
         <div class="item" data-key="连接速度：">{{ form.speed }} ms</div>
         <div class="item" data-key="客户端版本：">v1.0.0</div>
+        <div class="item" data-key="已授权"></div>
       </div>
     </div>
     <el-dialog
