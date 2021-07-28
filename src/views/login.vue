@@ -59,7 +59,7 @@
           :loading="loading"
           :style="{ width: '100%' }"
           :disabled="
-            form.email.length === 0 || form.password.length === 0 || agree
+            form.email.length === 0 || form.password.length === 0 || !agree
           "
           @click="login"
           >登录</el-button

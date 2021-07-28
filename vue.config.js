@@ -25,7 +25,16 @@ module.exports = {
 
   pluginOptions: {
     electronBuilder: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      builderOptions: {
+        publish: [
+          {
+            provider: "generic",
+            channel: "latest",
+            url: "http://advpc.muke.design/download/"
+          }
+        ]
+      }
     }
   },
 

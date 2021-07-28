@@ -150,7 +150,8 @@ import {
   GetIp,
   ChinaIp,
   GetTimeVideo,
-  CheckCaptcha
+  CheckCaptcha,
+  GetBulletin
 } from "@/services/api";
 
 export default {
@@ -185,9 +186,9 @@ export default {
   async mounted() {
     this.print("视频启动中...");
     const video_status = localStorage.is_modal || null;
-    // if (!video_status) {
-    //   await this.bulletin();
-    // }
+    if (!video_status) {
+      await this.bulletin();
+    }
     await this.init();
     await this.getTime();
     await this.newWordSpeed();
