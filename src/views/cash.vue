@@ -52,12 +52,9 @@
       </el-form-item>
 
       <el-form-item :style="{ marginTop: '20px' }">
-        <el-button  @click="moneyHistory"
-          >提现记录</el-button
-        >
+        <el-button @click="moneyHistory">提现记录</el-button>
       </el-form-item>
     </el-form>
-
 
     <el-dialog
       title="提现说明"
@@ -67,8 +64,6 @@
     >
       <div v-html="msg.value"></div>
     </el-dialog>
-
-
   </div>
 </template>
 
@@ -114,8 +109,8 @@ export default {
   methods: {
     init() {
       UserInfo()
-        .then(({ data }) => { 
-          console.log(data)
+        .then(({ data }) => {
+          console.log(data);
           data.surplus = Number(data.surplus);
           this.user = data;
         })
@@ -146,16 +141,16 @@ export default {
 
     //提现说明
     moneyMsg() {
-        this.dialog = true;
-        GetCashMsg().then((res) => {
-            console.log(res.data)
-        this.msg = res.data[3]
+      this.dialog = true;
+      GetCashMsg().then(res => {
+        console.log(res.data);
+        this.msg = res.data[3];
       });
     },
 
     //提现记录
     moneyHistory() {
-        this.$router.push("/personal")
+      this.$router.push("/personal");
     },
 
     closeModal() {

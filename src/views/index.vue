@@ -49,12 +49,12 @@
               <div class="btn disabled">停止</div>
             </template> -->
             <!-- <template v-else> -->
-              <!-- <template v-if="status"> -->
-              <template>
-                <div class="btn" @click="startVideo">启动</div>
-                <div class="btn"  @click="stopVideo">停止</div>
-              </template>
-              <!-- <template v-else>
+            <!-- <template v-if="status"> -->
+            <template>
+              <div class="btn" @click="startVideo">启动</div>
+              <div class="btn" @click="stopVideo">停止</div>
+            </template>
+            <!-- <template v-else>
                 <div class="btn disabled">启动</div>
                 <div class="btn" @click="stopVideo">停止</div>
               </template> -->
@@ -64,19 +64,19 @@
       </div>
       <div class="colR">
         <div class="video">
-            <div class="clock"></div>
-            <iframe
-                class="preview"
-                v-if="video"
-                :src="video.url"
-                autoplay = true
-                scrolling="no"
-                border="0"
-                frameborder="no"
-                framespacing="0"
-                allowfullscreen="true"
-            >
-            </iframe>
+          <div class="clock"></div>
+          <iframe
+            class="preview"
+            v-if="video"
+            :src="video.url"
+            autoplay="true"
+            scrolling="no"
+            border="0"
+            frameborder="no"
+            framespacing="0"
+            allowfullscreen="true"
+          >
+          </iframe>
           <!-- <video
             id="videoPlayer"
             ref="videoPlayer"
@@ -100,39 +100,38 @@
       </div>
     </div>
     <el-dialog
-            title="输入验证码"
-            width="400px"
-            :visible.sync="modal"
-            :close-on-click-modal="false"
-            :close-on-press-escape="false"
-            @close="modal = false"
+      title="输入验证码"
+      width="400px"
+      :visible.sync="modal"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      @close="modal = false"
+    >
+      <div style="margin-bottom: 10px">
+        <img
+          :src="`http://advpc.muke.design/api/frontend/captcha?time=${time}`"
+          class="codeImage"
+          alt=""
+          @click="renderImage"
+        />
+      </div>
+      <el-form ref="form" :model="form1">
+        <el-input
+          v-model="form1.code"
+          placeholder="请输入图片验证码"
+          maxlength="6"
+          @keyup.enter.native="okk"
         >
-            <div style="margin-bottom: 10px">
-                <img
-                    :src="`http://advpc.muke.design/api/frontend/captcha?time=${time}`"
-                    class="codeImage"
-                    alt=""
-                    @click="renderImage"
-                />
-            </div>
-            <el-form ref="form" :model="form1">
-                <el-input
-                    v-model="form1.code"
-                    placeholder="请输入图片验证码"
-                    maxlength="6"
-                    @keyup.enter.native = "okk"
-                >
-                </el-input>
-                <el-button
-                    type="primary"
-                    :style="{ width: '100%', margin: '10px 0' }"
-                    :disabled="form1.code === ''"
-                    @click="okk"
-                    >验证</el-button
-                >
-            </el-form>
+        </el-input>
+        <el-button
+          type="primary"
+          :style="{ width: '100%', margin: '10px 0' }"
+          :disabled="form1.code === ''"
+          @click="okk"
+          >验证</el-button
+        >
+      </el-form>
     </el-dialog>
-
 
     <el-dialog
       title="公告"
@@ -146,14 +145,21 @@
 </template>
 
 <script>
-import { UserInfo, GetVideo, GetIp, ChinaIp, GetTimeVideo, CheckCaptcha, } from "@/services/api";
+import {
+  UserInfo,
+  GetVideo,
+  GetIp,
+  ChinaIp,
+  GetTimeVideo,
+  CheckCaptcha
+} from "@/services/api";
 
 export default {
   data() {
     return {
       user: null,
       video: {
-          play_time: 0
+        play_time: 0
       },
       modal: false,
       timer: null,
@@ -168,14 +174,13 @@ export default {
         speed: "",
         status: ""
       },
-      form1:{
-        code:''
+      form1: {
+        code: ""
       },
       console: "",
 
       isDisable: false,
       status: true
-
     };
   },
   async mounted() {
@@ -231,7 +236,6 @@ export default {
       }时${minute < 10 ? "0" + minute : minute}分`;
     },
 
-
     getIp() {
       GetIp().then(({ origin }) => {
         this.form.ip = origin;
@@ -263,13 +267,13 @@ export default {
 
     videoList() {
       GetVideo()
-        .then((res) => {
-            this.video = res.data;
-            this.setIntervalFun();
-            
-            // this.video = res.url;
-            // this.isDisable = false;
-            // this.print("视频启动成功");
+        .then(res => {
+          this.video = res.data;
+          this.setIntervalFun();
+
+          // this.video = res.url;
+          // this.isDisable = false;
+          // this.print("视频启动成功");
         })
         .catch(err => {
           this.modal = true;
@@ -278,62 +282,61 @@ export default {
     },
 
     okk() {
-        let form = this.form1;
-            CheckCaptcha({code: form.code}).then((res) => {
-                if (res.msg == "验证成功") {
-                    this.modal=false
-                    this.videoTime();
-                }
-        });
+      let form = this.form1;
+      CheckCaptcha({ code: form.code }).then(res => {
+        if (res.msg == "验证成功") {
+          this.modal = false;
+          this.videoTime();
+        }
+      });
     },
 
     startVideo() {
-        this.status = true
-        // 播放视频
-        this.videoList();
-        this.print("视频播放中...");
-    //   this.status = false;
-    //   document.getElementById("videoPlayer").play();
-    //   this.print("视频开始播放");
+      this.status = true;
+      // 播放视频
+      this.videoList();
+      this.print("视频播放中...");
+      //   this.status = false;
+      //   document.getElementById("videoPlayer").play();
+      //   this.print("视频开始播放");
     },
 
     renderImage() {
-        this.time = new Date().getTime();
+      this.time = new Date().getTime();
     },
 
     // 视频时间间隔
     videoTime() {
-        GetTimeVideo()
-            .then((res) => {
-                this.video = res.data;
-            })
-            .catch((err) => {
-                this.print(err);
-            });
+      GetTimeVideo()
+        .then(res => {
+          this.video = res.data;
+        })
+        .catch(err => {
+          this.print(err);
+        });
     },
 
     // 设置定时器
     setIntervalFun() {
-        // console.log(this.video)
-        const that = this;
-        let timeNum = 0;
-        that.videoTimer = setInterval(() => {
-            timeNum++;
-            console.log(timeNum)
-            if (timeNum >= Number(that.video.play_time)) {
-                clearInterval(that.videoTimer);
-                that.videoList();
-            }
-        }, 1000);
-        this.print("视频播放中...");
+      // console.log(this.video)
+      const that = this;
+      let timeNum = 0;
+      that.videoTimer = setInterval(() => {
+        timeNum++;
+        console.log(timeNum);
+        if (timeNum >= Number(that.video.play_time)) {
+          clearInterval(that.videoTimer);
+          that.videoList();
+        }
+      }, 1000);
+      this.print("视频播放中...");
     },
-
 
     stopVideo() {
       this.status = false;
-      this.video = {}
+      this.video = {};
       clearInterval(this.videoTimer);
-    //   document.getElementById("videoPlayer").pause();
+      //   document.getElementById("videoPlayer").pause();
       this.print("视频暂停播放");
     },
 
@@ -451,14 +454,14 @@ export default {
         height: calc(100vh - 363px);
         background-color: #fff;
         border: solid 1px #ccc;
-        margin: 0; 
+        margin: 0;
         position: relative;
         .clock {
           width: 100%;
           height: 100%;
           position: absolute;
-          z-index: 999; 
-          outline: 0; 
+          z-index: 999;
+          outline: 0;
           background: rgba(255, 255, 255, 0);
         }
         .preview {
